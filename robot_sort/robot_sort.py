@@ -49,6 +49,19 @@ class SortingRobot:
         else:
             return False
 
+    def item_pickup(self):
+        """
+        Picks up the first item to initiate swapping
+        """
+        self._item = self._list[self._position]
+
+    def item_drop(self):
+        """
+        Drops an item in place without swapping
+        """
+        self._list[self._position] = self._item
+        self._item = None
+
     def swap_item(self):
         """
         The robot swaps its currently held item with the list item in front
@@ -81,24 +94,50 @@ class SortingRobot:
         Turn on the robot's light
         """
         self._light = "ON"
+
     def set_light_off(self):
         """
         Turn off the robot's light
         """
         self._light = "OFF"
+
     def light_is_on(self):
         """
         Returns True if the robot's light is on and False otherwise.
         """
         return self._light == "ON"
 
+    def at_end(self):
+        if self._position == self._list[-1]:
+            return True
+    
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        self.item_pickup()
 
+        if self.light_is_on is False:
+            self.set_light_on()
+
+        while self.can_move_right():
+            if self.compare_item() == 1:
+                self.move_right()
+                self.swap_item()
+                self.set_light_on
+            elif self.compare_item() == 0:
+                self.move_right()
+                self.set_light_on
+            else:
+                self.move_right()
+
+        if self.at_end:
+            if self.light_is_on is False:
+                return self._list
+            else:
+                while self.can_move_left():
+                    self.move_left()
+                self.sort()
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
